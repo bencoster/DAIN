@@ -10,7 +10,7 @@ and [Ming-Hsuan Yang](http://faculty.ucmerced.edu/mhyang/)
 
 IEEE Conference on Computer Vision and Pattern Recognition, Long Beach, CVPR 2019
 
-THIS WORK IS BUILT UPON OUR PREVIOUS WORK CALLED [MEMC-NET](https://github.com/baowenbo/MEMC-Net), IN WHICH WE PROPOSE THE ADAPTIVE WARPING LAYER. PLEASE ALSO CONSIDER CITING MEMC-NET.
+This work is developed based on our TPAMI work [MEMC-Net](https://github.com/baowenbo/MEMC-Net), where we propose the adaptive warping layer. Please also consider referring to it.
 
 ### Table of Contents
 1. [Introduction](#introduction)
@@ -20,7 +20,8 @@ THIS WORK IS BUILT UPON OUR PREVIOUS WORK CALLED [MEMC-NET](https://github.com/b
 1. [Testing Pre-trained Models](#testing-pre-trained-models)
 1. [Downloading Results](#downloading-results)
 1. [Slow-motion Generation](#slow-motion-generation)
-1. [Training New Models](#training-new-models) 
+1. [Training New Models](#training-new-models)
+1. [Google Colab Demo](#google-colab-demo)
 
 ### Introduction
 We propose the **D**epth-**A**ware video frame **IN**terpolation (**DAIN**) model to explicitly detect the occlusion by exploring the depth cue.
@@ -92,6 +93,13 @@ If you find the code and datasets useful in your research, please cite:
         booktitle = {IEEE Conference on Computer Vision and Pattern Recognition},
         year      = {2019}
     }
+    @article{MEMC-Net,
+         title={MEMC-Net: Motion Estimation and Motion Compensation Driven Neural Network for Video Interpolation and Enhancement},
+         author={Bao, Wenbo and Lai, Wei-Sheng, and Zhang, Xiaoyun and Gao, Zhiyong and Yang, Ming-Hsuan},
+         journal={IEEE Transactions on Pattern Analysis and Machine Intelligence},
+         doi={10.1109/TPAMI.2019.2941941},
+         year={2018}
+    }
 
 ### Requirements and Dependencies
 - Ubuntu (We test with Ubuntu = 16.04.5 LTS)
@@ -143,6 +151,14 @@ and Middlebury dataset:
     $ unzip other-gt-interp.zip
     $ cd ..
 
+preinstallations:
+
+    $ cd PWCNet/correlation_package_pytorch1_0
+    $ sh build.sh
+    $ cd ../my_package
+    $ sh build.sh
+    $ cd ..
+
 We are good to go by:
 
     $ CUDA_VISIBLE_DEVICES=0 python demo_MiddleBury.py
@@ -151,7 +167,7 @@ The interpolated results are under `MiddleBurySet/other-result-author/[random nu
 
 ### Downloading Results
 Our DAIN model achieves the state-of-the-art performance on the UCF101, Vimeo90K, and Middlebury ([*eval*](http://vision.middlebury.edu/flow/eval/results/results-n1.php) and *other*).
-Dowload our interpolated results with:
+Download our interpolated results with:
     
     $ wget http://vllab1.ucmerced.edu/~wenbobao/DAIN/UCF101_DAIN.zip
     $ wget http://vllab1.ucmerced.edu/~wenbobao/DAIN/Vimeo90K_interp_DAIN.zip
@@ -200,7 +216,7 @@ Download the pretrained MegaDepth and PWCNet models
     
 Run the training script:
 
-    $ CUDA_VISIBLE_DEVICES=0 python train.py --datasetPath /path/to/your/dataset --batch_size 1 --save_which 1 --lr 0.0001 --rectify_lr 0.0001 --flow_lr_coe 0.01 --occ_lr_coe 0.0 --filter_lr_coe 1.0 --ctx_lr_coe 1.0 --alpha 0.0 1.0 --patience 4 --factor 0.2
+    $ CUDA_VISIBLE_DEVICES=0 python train.py --datasetPath /path/to/your/dataset --batch_size 1 --save_which 1 --lr 0.0005 --rectify_lr 0.0005 --flow_lr_coe 0.01 --occ_lr_coe 0.0 --filter_lr_coe 1.0 --ctx_lr_coe 1.0 --alpha 0.0 1.0 --patience 4 --factor 0.2
     
 The optimized models will be saved to the `model_weights/[random number]` directory, where [random number] is generated for different runs.
 
@@ -208,6 +224,14 @@ Replace the pre-trained `model_weights/best.pth` model with the newly trained `m
 Then test the new model by executing: 
 
     $ CUDA_VISIBLE_DEVICES=0 python demo_MiddleBury.py
+
+### Google Colab Demo
+This is a modification of DAIN that allows the usage of Google Colab and is able to do a full demo interpolation from a source video to a target video.
+
+Original Notebook File by btahir can be found [here](https://github.com/baowenbo/DAIN/issues/44).
+This is a modification by [Styler00Dollar](https://github.com/styler00dollar) and [Alpha](https://github.com/AlphaGit).
+
+Simply upload the `Colab_DAIN.ipynb` file to your Google Drive or use this [link](https://colab.research.google.com/drive/1gzsfDV_MIdehr7Y8ZzWjTuW-mMZRP4Vy).
 
 ### Contact
 [Wenbo Bao](mailto:bwb0813@gmail.com); [Wei-Sheng (Jason) Lai](mailto:phoenix104104@gmail.com)

@@ -45,7 +45,7 @@ parser.add_argument('--flow_lr_coe', type = float, default=0.01, help = 'relativ
 parser.add_argument('--occ_lr_coe', type = float, default=1.0, help = 'relative learning rate w.r.t basic learning rate (default: 1.0)')
 parser.add_argument('--filter_lr_coe', type = float, default=1.0, help = 'relative learning rate w.r.t basic learning rate (default: 1.0)')
 parser.add_argument('--ctx_lr_coe', type = float, default=1.0, help = 'relative learning rate w.r.t basic learning rate (default: 1.0)')
-parser.add_argument('--depth_lr_coe', type = float, default=0.01, help = 'relative learning rate w.r.t basic learning rate (default: 0.01)')
+parser.add_argument('--depth_lr_coe', type = float, default=0.001, help = 'relative learning rate w.r.t basic learning rate (default: 0.01)')
 # parser.add_argument('--deblur_lr_coe', type = float, default=0.01, help = 'relative learning rate w.r.t basic learning rate (default: 0.01)')
 
 parser.add_argument('--alpha', type=float,nargs='+', default=[0.0, 1.0], help= 'the ration of loss for interpolated and rectified result (default: [0.0, 1.0])')
@@ -66,6 +66,12 @@ parser.add_argument('--dtype', default=torch.cuda.FloatTensor, choices = [torch.
 parser.add_argument('--uid', type=str, default= None, help='unique id for the training')
 parser.add_argument('--force', action='store_true', help='force to override the given uid')
 
+# Colab version
+parser.add_argument('--start_frame', type = int, default = 1, help='first frame number to process')
+parser.add_argument('--end_frame', type = int, default = 100, help='last frame number to process')
+parser.add_argument('--frame_input_dir', type = str, default = '/content/DAIN/input_frames', help='frame input directory')
+parser.add_argument('--frame_output_dir', type = str, default = '/content/DAIN/output_frames', help='frame output directory')
+
 args = parser.parse_args()
 
 import shutil
@@ -74,10 +80,10 @@ if args.uid == None:
     unique_id = str(numpy.random.randint(0, 100000))
     print("revise the unique id to a random numer " + str(unique_id))
     args.uid = unique_id
-    timestamp = datetime.datetime.now().strftime("%a-%b-%d-%H:%M")
-    save_path = '../model_weights/'+ args.uid  +'-' + timestamp
+    timestamp = datetime.datetime.now().strftime("%a-%b-%d-%H-%M")
+    save_path = './model_weights/'+ args.uid  +'-' + timestamp
 else:
-    save_path = '../model_weights/'+ str(args.uid)
+    save_path = './model_weights/'+ str(args.uid)
 
 # print("no pth here : " + save_path + "/best"+".pth")
 if not os.path.exists(save_path + "/best"+".pth"):
