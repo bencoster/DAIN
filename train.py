@@ -1,6 +1,6 @@
 import sys
 import os
-
+import shutil
 import threading
 import torch
 from torch.autograd import Variable
@@ -29,8 +29,8 @@ def train():
         model = model.cuda()
 
     if not args.SAVED_MODEL==None:
-        # args.SAVED_MODEL ='../model_weights/'+ args.SAVED_MODEL + "/best" + ".pth"
-        args.SAVED_MODEL ='./model_weights/best.pth'
+        args.SAVED_MODEL ='/content/DAIN/model_weights'+ args.SAVED_MODEL + "/best" + ".pth"
+        # args.SAVED_MODEL ='./model_weights/best.pth'
         print("Fine tuning on " +  args.SAVED_MODEL)
         if not  args.use_cuda:
             pretrained_dict = torch.load(args.SAVED_MODEL, map_location=lambda storage, loc: storage)
@@ -237,13 +237,17 @@ def train():
         numpy.savetxt(args.log, numpy.array(auxiliary_data), fmt='%.8f', delimiter=',')
         training_losses.reset()
 
+
         print("\t\tFinished an epoch, Check and Save the model weights")
             # we check the validation loss instead of training loss. OK~
         if saved_total_loss >= val_total_losses.avg:
             saved_total_loss = val_total_losses.avg
             torch.save(model.state_dict(), args.save_path + "/best"+".pth")
             print("\t\tBest Weights updated for decreased validation loss\n")
-
+            if os.path.exists("/content/model_weights")==True:
+              shutil.rmtree("/content/model_weights")
+            shutil.copytree("/content/DAIN/model_weights", "/content/model_weights")
+            
         else:
             print("\t\tWeights Not updated for undecreased validation loss\n")
 
